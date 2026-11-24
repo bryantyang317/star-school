@@ -80,9 +80,13 @@ nav.tabs button.on span{filter:none;opacity:1;transform:scale(1.12)}
 #map.inclass .bld[data-type=classroom]::after{content:"✏️ 上課中"}
 @keyframes bob{to{margin-top:-5px}}
 .mini{border:2px dashed var(--line);background:#fff;border-radius:12px;padding:4px 10px;font-size:13px;color:var(--muted);min-height:34px}
-.mapwrap{flex:1;min-height:0;overflow:auto;background:#e9dcc3;-webkit-overflow-scrolling:touch}
-.mapin{width:max-content;padding:64px 32px 120px}
-#map{position:relative;width:1440px;height:540px;border-radius:26px;background:radial-gradient(circle at 30% 30%,#a3dd7d 0 2px,transparent 3px) 0 0/34px 34px,radial-gradient(circle at 70% 70%,#84c862 0 2px,transparent 3px) 0 0/46px 46px,#8fd16a;box-shadow:0 0 0 8px #d8b483,0 0 0 13px #b98d55}
+.mapwrap{flex:1;min-height:0;overflow:auto;background:#e9dcc3;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}
+.mapin{position:relative;width:1504px;height:724px}
+.zoomctl{position:absolute;left:max(16px,env(safe-area-inset-left));bottom:18px;z-index:20;display:flex;align-items:center;background:#fff;border:2px solid var(--line);border-radius:18px;box-shadow:0 4px 0 var(--line)}
+.zoomctl button{border:0;background:none;width:46px;height:46px;font-size:24px;font-weight:900}
+.zoomctl span{min-width:52px;text-align:center;font-weight:900;font-size:14px}
+.placebar.on~.zoomctl{display:none}
+#map{position:absolute;left:32px;top:64px;transform-origin:0 0;width:1440px;height:540px;border-radius:26px;background:radial-gradient(circle at 30% 30%,#a3dd7d 0 2px,transparent 3px) 0 0/34px 34px,radial-gradient(circle at 70% 70%,#84c862 0 2px,transparent 3px) 0 0/46px 46px,#8fd16a;box-shadow:0 0 0 8px #d8b483,0 0 0 13px #b98d55}
 #map.gridon::before{content:"";position:absolute;inset:0;border-radius:26px;background-image:linear-gradient(rgba(255,255,255,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
 .bld{position:absolute;cursor:pointer}
 .bld svg{position:absolute;left:0;top:-50px;overflow:visible;pointer-events:none;transform-origin:50% 100%}
@@ -286,6 +290,7 @@ input[type=date]{font:inherit;font-size:16px;border:1.5px solid #cfd8e3;border-r
     <div class="mapwrap" id="wrap"><div class="mapin"><div id="map"></div></div></div>
     <button class="fab" id="fab">＋ 建造</button>
     <div class="placebar" id="placebar"><span id="pbtxt"></span><button class="btn ghostbtn" id="pbcancel">取消</button><button class="btn" id="pbok">蓋在這裡</button></div>
+    <div class="zoomctl"><button id="zout" aria-label="縮小">－</button><span id="zlv">100%</span><button id="zin" aria-label="放大">＋</button></div>
   </section>
   <section id="rewards" class="view"></section>
   <section id="week" class="view"></section>
@@ -611,7 +616,41 @@ const ROLES=(()=>{const r=[{role:'ft'}];let k=0;const stu=()=>{const p={role:k%2
 const population=()=>S.campus.buildings.reduce((a,b)=>a+(CAT[b.type].ppl?CAT[b.type].ppl+2*(b.level-1):0),0);
 
 /* ---------- campus ---------- */
-const mapEl=$('#map'),wrap=$('#wrap');
+const mapEl=$('#map'),wrap=$('#wrap'),mapIn=document.querySelector('.mapin');
+/* zoom: pinch, ctrl+wheel, buttons; double tap = back to 100% */
+const PADL=32,PADT=64,PADR=32,PADB=120,ZMIN=.4,ZMAX=2.2;
+let zoom=1,openT=null,pinch=null,tapStart=null,lastTap=0;
+function applyZoom(z,cx,cy){
+  z=Math.max(ZMIN,Math.min(ZMAX,z));const wr=wrap.getBoundingClientRect();
+  const px=(cx===undefined?wr.left+wr.width/2:cx)-wr.left,py=(cy===undefined?wr.top+wr.height/2:cy)-wr.top;
+  const mx=(wrap.scrollLeft+px-PADL)/zoom,my=(wrap.scrollTop+py-PADT)/zoom;
+  zoom=z;mapEl.style.transform=`scale(${z})`;
+  mapIn.style.width=(COLS*CELL*z+PADL+PADR)+'px';mapIn.style.height=(ROWS*CELL*z+PADT+PADB)+'px';
+  wrap.scrollLeft=mx*z+PADL-px;wrap.scrollTop=my*z+PADT-py;
+  const lv=document.getElementById('zlv');if(lv)lv.textContent=Math.round(z*100)+'%';
+}
+const tdist=(a,b)=>Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+wrap.addEventListener('touchstart',e=>{
+  if(e.touches.length===2){pinch={d:tdist(e.touches[0],e.touches[1]),z:zoom};tapStart=null;clearTimeout(openT)}
+  else if(e.touches.length===1)tapStart={x:e.touches[0].clientX,y:e.touches[0].clientY,t:Date.now()};
+},{passive:true});
+wrap.addEventListener('touchmove',e=>{
+  if(pinch&&e.touches.length===2){e.preventDefault();const a=e.touches[0],b=e.touches[1];applyZoom(pinch.z*tdist(a,b)/pinch.d,(a.clientX+b.clientX)/2,(a.clientY+b.clientY)/2)}
+},{passive:false});
+wrap.addEventListener('touchend',e=>{
+  if(pinch){if(e.touches.length<2)pinch=null;lastTap=0;return}
+  if(!tapStart||e.touches.length)return;
+  const t=e.changedTouches[0],moved=Math.hypot(t.clientX-tapStart.x,t.clientY-tapStart.y);
+  if(moved<12&&Date.now()-tapStart.t<300){const now=Date.now();
+    if(now-lastTap<320&&!mode){clearTimeout(openT);e.preventDefault();applyZoom(1,t.clientX,t.clientY);toast('回到原始大小');lastTap=0}
+    else lastTap=now}
+  tapStart=null;
+});
+wrap.addEventListener('dblclick',e=>{if(mode)return;clearTimeout(openT);if(zoom!==1){applyZoom(1,e.clientX,e.clientY);toast('回到原始大小')}});
+wrap.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();applyZoom(zoom*Math.exp(-e.deltaY*.01),e.clientX,e.clientY)},{passive:false});
+document.getElementById('zin').onclick=()=>applyZoom(zoom*1.25);
+document.getElementById('zout').onclick=()=>applyZoom(zoom/1.25);
+applyZoom(1);
 const npcs=[];
 let view='today',mode=null,ghost=null,buildTab='植物';
 const bEl=id=>mapEl.querySelector(`.bld[data-id="${id}"]`);
@@ -782,8 +821,8 @@ $('#pbok').onclick=()=>{
 mapEl.addEventListener('click',e=>{
   const np=e.target.closest('.npc');
   if(np&&!mode){speak(np._n);return}
-  if(mode){const r=mapEl.getBoundingClientRect(),c=CAT[mode.type];mode.c=Math.max(0,Math.min(COLS-c.w,Math.floor((e.clientX-r.left)/CELL)-Math.floor(c.w/2)));mode.r=Math.max(0,Math.min(ROWS-c.h,Math.floor((e.clientY-r.top)/CELL)-Math.floor(c.h/2)));updGhost();return}
-  const bl=e.target.closest('.bld');if(bl)openBld(bl.dataset.id);
+  if(mode){const r=mapEl.getBoundingClientRect(),c=CAT[mode.type];mode.c=Math.max(0,Math.min(COLS-c.w,Math.floor((e.clientX-r.left)/zoom/CELL)-Math.floor(c.w/2)));mode.r=Math.max(0,Math.min(ROWS-c.h,Math.floor((e.clientY-r.top)/zoom/CELL)-Math.floor(c.h/2)));updGhost();return}
+  const bl=e.target.closest('.bld');if(bl){clearTimeout(openT);const id=bl.dataset.id;openT=setTimeout(()=>openBld(id),280)}
 });
 
 /* sheets */
