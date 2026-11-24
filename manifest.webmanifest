@@ -1,6 +1,6 @@
 {
-  "name": "星星國小打卡",
-  "short_name": "星星國小",
+  "name": "星星小學打卡",
+  "short_name": "星星小學",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

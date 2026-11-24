@@ -1,5 +1,5 @@
-/* 星星國小打卡：離線用的快取 */
-const CACHE = 'star-school-v1';
+/* 星星小學打卡：離線用的快取 */
+const CACHE = 'star-school-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {

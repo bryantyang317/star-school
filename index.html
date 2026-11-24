@@ -7,8 +7,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="星星國小">
-<title>星星國小打卡</title>
+<meta name="apple-mobile-web-app-title" content="星星小學">
+<title>星星小學打卡</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -318,7 +318,7 @@ input[type=date]{font:inherit;font-size:16px;border:1.5px solid #cfd8e3;border-r
 </div>
 <div class="onb" id="onb"><div class="onbbox">
   <svg class="onblogo" viewBox="-60 -60 120 120"><path d="M0-52 15-17 52-15 23 9 33 46 0 25-33 46-23 9-52-15-15-17Z" fill="#ffbe1a" stroke="#e59c00" stroke-width="4" stroke-linejoin="round"/></svg>
-  <h1>星星國小</h1>
+  <h1>星星小學</h1>
   <div data-s="loading"><p>連線中…</p></div>
   <div data-s="offline"><p>現在連不上網路，請確認網路後再打開一次。</p><button class="btn big" data-o="retry">重新連線</button></div>
   <div data-s="start"><p>這台手機是誰在用？</p><button class="btn big" data-o="kid">🧒 我是小朋友</button><button class="btn big blue" data-o="parent">🧑 我是爸爸媽媽</button><button class="linkbtn" data-o="local">先在這台裝置試玩（不同步）</button></div>
@@ -365,10 +365,10 @@ const SLOTS=['早上','放學後','睡前'];
 const TITLES={today:'今天',campus:'我的校園',rewards:'獎勵',week:'這週'};
 const SHIRTS=['#ff9e7a','#7ec8ff','#ffd23f','#9be07a','#c9a2ff','#ff8fb8','#5fd0c4'];
 const TE=['今天也要開心學習喔！','記得多喝水～','你的校園越來越漂亮了！','上課囉，同學們！'];
-const PR=['歡迎來到星星國小！','我們的學校越來越熱鬧了','謝謝你這麼用心蓋學校','校長最喜歡看大家玩了'];
+const PR=['歡迎來到星星小學！','我們的學校越來越熱鬧了','謝謝你這麼用心蓋學校','校長最喜歡看大家玩了'];
 const NU=['不舒服要來保健室喔','記得洗手！','跌倒了要小心喔','多喝水，身體棒棒'];
 const CL=['垃圾要分類喔！','校園乾乾淨淨真舒服','寶特瓶放這邊','謝謝你幫忙撿垃圾'];
-const GD=['同學注意安全喔！','早安！歡迎來上學','我會好好守護星星國小','放學要排隊喔'];
+const GD=['同學注意安全喔！','早安！歡迎來上學','我會好好守護星星小學','放學要排隊喔'];
 const DEF_SCHED={periods:[['08:40','09:20'],['09:30','10:10'],['10:30','11:10'],['11:20','12:00'],['13:40','14:20'],['14:30','15:10'],['15:20','16:00']],lunch:['12:00','13:20']};
 const toMin=t=>{const a=t.split(':').map(Number);return a[0]*60+a[1]};
 const tshow=t=>t.replace(/^0/,'');
@@ -583,10 +583,10 @@ const DRAW={
     return s;
   },
   gate(lv){
-    if(lv===1)return `<rect x="24" y="0" width="72" height="60" fill="#e9dcc3"/><rect x="6" y="-30" width="16" height="86" rx="3" fill="#c9b8a6"/><rect x="98" y="-30" width="16" height="86" rx="3" fill="#c9b8a6"/><rect x="0" y="-46" width="120" height="24" rx="7" fill="#3c5aa6"/><text x="60" y="-29" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">星星國小</text>`;
+    if(lv===1)return `<rect x="24" y="0" width="72" height="60" fill="#e9dcc3"/><rect x="6" y="-30" width="16" height="86" rx="3" fill="#c9b8a6"/><rect x="98" y="-30" width="16" height="86" rx="3" fill="#c9b8a6"/><rect x="0" y="-46" width="120" height="24" rx="7" fill="#3c5aa6"/><text x="60" y="-29" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">星星小學</text>`;
     const fls=(x)=>`<rect x="${x}" y="46" width="18" height="10" rx="3" fill="#a8643c"/>`+[0,6,12].map((d,i)=>`<circle cx="${x+3+d}" cy="44" r="3.4" fill="${['#ff7eb6','#ffd23f','#b388ff'][i]}"/>`).join('');
-    if(lv===2)return `<rect x="24" y="0" width="72" height="60" fill="#e9dcc3"/><path d="M24 20h72M24 40h72M48 0v60M72 0v60" stroke="#d8c8a8" stroke-width="1.5"/><rect x="4" y="-30" width="20" height="86" rx="3" fill="#b9aa98"/><rect x="96" y="-30" width="20" height="86" rx="3" fill="#b9aa98"/><path d="M4 -10h20M4 10h20M4 30h20M96 -10h20M96 10h20M96 30h20" stroke="#a39480" stroke-width="1.5"/><rect x="-2" y="-50" width="124" height="26" rx="8" fill="#2f4a9a" stroke="#ffd23f" stroke-width="2.5"/><text x="60" y="-32" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">星星國小</text><rect x="9" y="-60" width="10" height="10" rx="2" fill="#555"/><circle cx="14" cy="-64" r="5" fill="#ffe27a"/><rect x="101" y="-60" width="10" height="10" rx="2" fill="#555"/><circle cx="106" cy="-64" r="5" fill="#ffe27a"/>`+fls(-14)+fls(116);
-    return `<rect x="22" y="0" width="76" height="60" fill="#d9a07a"/><path d="M22 15h76M22 30h76M22 45h76M41 0v60M60 0v60M79 0v60" stroke="#c4835c" stroke-width="1.5"/><path d="M26 54H94" stroke="#777" stroke-width="2.5" stroke-dasharray="3 5"/><rect x="0" y="-40" width="24" height="96" rx="3" fill="#c0583f"/><rect x="96" y="-40" width="24" height="96" rx="3" fill="#c0583f"/><path d="M0 -20h24M0 0h24M0 20h24M0 40h24M96 -20h24M96 0h24M96 20h24M96 40h24" stroke="#a3452f" stroke-width="1.5"/><rect x="-3" y="-46" width="30" height="8" rx="2" fill="#ffd23f"/><rect x="93" y="-46" width="30" height="8" rx="2" fill="#ffd23f"/><path d="M12 -46Q60 -92 108 -46L108 -36Q60 -78 12 -36Z" fill="#3c5aa6" stroke="#ffd23f" stroke-width="2"/><rect x="18" y="-40" width="84" height="26" rx="7" fill="#1f356f" stroke="#ffd23f" stroke-width="2.5"/><text x="60" y="-22" text-anchor="middle" font-size="16" font-weight="900" fill="#ffd23f">星星國小</text><circle cx="60" cy="-70" r="9" fill="#fff" stroke="#ffd23f" stroke-width="2"/><path d="M60 -77l2.1 4.6 5 .5-3.8 3.4 1.1 4.9-4.4-2.6-4.4 2.6 1.1-4.9-3.8-3.4 5-.5z" fill="#ffbe1a"/>`+flag(12,-80,'#ff5a5a')+flag(108,-80,'#3d9bf0')+fls(-18)+fls(120)+`<ellipse cx="-10" cy="54" rx="10" ry="5" fill="#3e9c45"/><ellipse cx="130" cy="54" rx="10" ry="5" fill="#3e9c45"/>`;
+    if(lv===2)return `<rect x="24" y="0" width="72" height="60" fill="#e9dcc3"/><path d="M24 20h72M24 40h72M48 0v60M72 0v60" stroke="#d8c8a8" stroke-width="1.5"/><rect x="4" y="-30" width="20" height="86" rx="3" fill="#b9aa98"/><rect x="96" y="-30" width="20" height="86" rx="3" fill="#b9aa98"/><path d="M4 -10h20M4 10h20M4 30h20M96 -10h20M96 10h20M96 30h20" stroke="#a39480" stroke-width="1.5"/><rect x="-2" y="-50" width="124" height="26" rx="8" fill="#2f4a9a" stroke="#ffd23f" stroke-width="2.5"/><text x="60" y="-32" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">星星小學</text><rect x="9" y="-60" width="10" height="10" rx="2" fill="#555"/><circle cx="14" cy="-64" r="5" fill="#ffe27a"/><rect x="101" y="-60" width="10" height="10" rx="2" fill="#555"/><circle cx="106" cy="-64" r="5" fill="#ffe27a"/>`+fls(-14)+fls(116);
+    return `<rect x="22" y="0" width="76" height="60" fill="#d9a07a"/><path d="M22 15h76M22 30h76M22 45h76M41 0v60M60 0v60M79 0v60" stroke="#c4835c" stroke-width="1.5"/><path d="M26 54H94" stroke="#777" stroke-width="2.5" stroke-dasharray="3 5"/><rect x="0" y="-40" width="24" height="96" rx="3" fill="#c0583f"/><rect x="96" y="-40" width="24" height="96" rx="3" fill="#c0583f"/><path d="M0 -20h24M0 0h24M0 20h24M0 40h24M96 -20h24M96 0h24M96 20h24M96 40h24" stroke="#a3452f" stroke-width="1.5"/><rect x="-3" y="-46" width="30" height="8" rx="2" fill="#ffd23f"/><rect x="93" y="-46" width="30" height="8" rx="2" fill="#ffd23f"/><path d="M12 -46Q60 -92 108 -46L108 -36Q60 -78 12 -36Z" fill="#3c5aa6" stroke="#ffd23f" stroke-width="2"/><rect x="18" y="-40" width="84" height="26" rx="7" fill="#1f356f" stroke="#ffd23f" stroke-width="2.5"/><text x="60" y="-22" text-anchor="middle" font-size="16" font-weight="900" fill="#ffd23f">星星小學</text><circle cx="60" cy="-70" r="9" fill="#fff" stroke="#ffd23f" stroke-width="2"/><path d="M60 -77l2.1 4.6 5 .5-3.8 3.4 1.1 4.9-4.4-2.6-4.4 2.6 1.1-4.9-3.8-3.4 5-.5z" fill="#ffbe1a"/>`+flag(12,-80,'#ff5a5a')+flag(108,-80,'#3d9bf0')+fls(-18)+fls(120)+`<ellipse cx="-10" cy="54" rx="10" ry="5" fill="#3e9c45"/><ellipse cx="130" cy="54" rx="10" ry="5" fill="#3e9c45"/>`;
   },
 };
 function svgFor(type,lv){const c=CAT[type],W=c.w*CELL,H=c.h*CELL;return `<svg width="${W}" height="${H+50}" viewBox="0 -50 ${W} ${H+50}">${DRAW[type](lv,W,H)}</svg>`}
@@ -678,7 +678,7 @@ function syncPeople(announce){
   });
   if(announce&&n>before){
     const got=ROLES.slice(before,n);
-    if(got.some(p=>p.role==='pr'))setTimeout(()=>toast('校長來到星星國小了！'),900);
+    if(got.some(p=>p.role==='pr'))setTimeout(()=>toast('校長來到星星小學了！'),900);
     else if(got.some(p=>p.role==='mt'))setTimeout(()=>toast('男老師來了！'),900);
     else setTimeout(()=>toast(`有 ${n-before} 位新同學來上學了！`),900);
   }
@@ -841,7 +841,7 @@ function openBld(id){
   let up;
   if(b.level>=3)up=`<p class="note">已經是最高級了，好厲害！</p>`;
   else{const cost=c.cost[b.level],lack=cost-a;up=`<div class="upg"><span class="pv big">${mini(b.type,b.level+1)}</span><div><b>升到 ${b.level+1} 級</b><br><small>${UPNOTE[b.level+1]}${c.ppl?'，再多 2 人':''}</small><br><button class="btn" data-up="${b.id}" ${lack>0?'disabled':''}>${lack>0?`還差 ${lack} 顆星`:`升級（★ ${cost}）`}</button></div></div>`}
-  openSheet(`<div class="sh-h"><h2>${c.name}</h2><span class="lvs">${[1,2,3].map(i=>`<span class="lv ${i<=b.level?'on':''}">★</span>`).join('')}</span></div><span class="pv big">${mini(b.type,b.level)}</span><p class="note">${c.ppl?`現在帶來 ${c.ppl+2*(b.level-1)} 位老師和同學${b.type==='health'?'，護理師阿姨也在這裡':''}`:b.type==='gate'?'星星國小的大門，新來的老師和同學都從這裡進學校。校門可以升級，也可以移動位置。':b.type==='guardhouse'?'警衛叔叔在這裡守護校園':b.type==='recycle'?'清潔工伯伯在這裡整理資源回收':b.type==='clocktower'?`${timeWords()}。鐘塔的指針就是現在的時間。<br><button class="btn" data-time="1" style="margin-top:8px">再報一次時間</button> <button class="btn ghostbtn" data-bell="1" style="margin-top:8px">聽上下課鐘聲</button>`:'讓校園更漂亮'}</p>${up}<div class="row">${b.type==='gate'?'':`<button class="btn ghostbtn danger" data-demo="${b.id}">拆除</button>`}<button class="btn ghostbtn" data-move="${b.id}">移動位置</button><button class="btn ghostbtn" data-close="1">關閉</button></div>`);
+  openSheet(`<div class="sh-h"><h2>${c.name}</h2><span class="lvs">${[1,2,3].map(i=>`<span class="lv ${i<=b.level?'on':''}">★</span>`).join('')}</span></div><span class="pv big">${mini(b.type,b.level)}</span><p class="note">${c.ppl?`現在帶來 ${c.ppl+2*(b.level-1)} 位老師和同學${b.type==='health'?'，護理師阿姨也在這裡':''}`:b.type==='gate'?'星星小學的大門，新來的老師和同學都從這裡進學校。校門可以升級，也可以移動位置。':b.type==='guardhouse'?'警衛叔叔在這裡守護校園':b.type==='recycle'?'清潔工伯伯在這裡整理資源回收':b.type==='clocktower'?`${timeWords()}。鐘塔的指針就是現在的時間。<br><button class="btn" data-time="1" style="margin-top:8px">再報一次時間</button> <button class="btn ghostbtn" data-bell="1" style="margin-top:8px">聽上下課鐘聲</button>`:'讓校園更漂亮'}</p>${up}<div class="row">${b.type==='gate'?'':`<button class="btn ghostbtn danger" data-demo="${b.id}">拆除</button>`}<button class="btn ghostbtn" data-move="${b.id}">移動位置</button><button class="btn ghostbtn" data-close="1">關閉</button></div>`);
 }
 function askDemolish(id){const b=S.campus.buildings.find(x=>x.id===id);if(!b)return;const c=CAT[b.type];openSheet(`<div class="sh-h"><h2>要拆除${c.name}嗎？</h2></div><span class="pv big">${mini(b.type,b.level)}</span><p class="note">拆除後這個設施會消失，用掉的星星不會退回${c.ppl?`，也會少 ${c.ppl+2*(b.level-1)} 位老師和同學`:''}。</p><div class="row"><button class="btn ghostbtn" data-demono="${b.id}">否</button><button class="btn danger" data-demoyes="${b.id}">是，拆除</button></div>`)}
 function demolish(id){
