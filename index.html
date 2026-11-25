@@ -352,13 +352,15 @@ const CAT={
   health:{name:'保健室',cat:'育樂',w:2,h:1,cost:[20,30,45],ppl:2},
   recycle:{name:'資源回收室',cat:'育樂',w:2,h:1,cost:[15,22,35],ppl:0},
   auditorium:{name:'大禮堂',cat:'育樂',w:3,h:2,cost:[40,60,90],ppl:6},
-  sportscenter:{name:'運動中心',cat:'運動',w:3,h:2,cost:[35,55,85],ppl:5},
+  sportscenter:{name:'活動中心',cat:'運動',w:3,h:2,cost:[35,55,85],ppl:5},
+  pool:{name:'游泳池',cat:'運動',w:3,h:2,cost:[25,38,60],ppl:3},
+  equip:{name:'運動器材室',cat:'運動',w:2,h:1,cost:[10,15,25],ppl:0},
   court:{name:'籃球場',cat:'運動',w:3,h:2,cost:[15,25,40],ppl:3},
   track:{name:'田徑場',cat:'運動',w:4,h:3,cost:[40,60,90],ppl:7},
   classroom:{name:'教室',cat:'教學',w:2,h:2,cost:[20,30,50],ppl:5},
   library:{name:'圖書館',cat:'教學',w:3,h:2,cost:[30,45,70],ppl:5},
   office:{name:'老師辦公室',cat:'教學',w:2,h:2,cost:[25,38,60],ppl:3},
-  principal:{name:'校長室',cat:'教學',w:2,h:2,cost:[35,50,80],ppl:3},
+  principal:{name:'校長室',cat:'教學',w:2,h:2,cost:[35,50,80],ppl:0},
   guardhouse:{name:'警衛室',cat:'教學',w:1,h:1,cost:[12,18,28],ppl:0},
   clocktower:{name:'鐘塔',cat:'教學',w:1,h:2,cost:[15,25,40],ppl:0},
   gate:{name:'校門',cat:'',w:2,h:1,cost:[0,20,40],ppl:0}
@@ -370,6 +372,7 @@ const TITLES={today:'今天',campus:'我的校園',rewards:'獎勵',week:'這週
 const SHIRTS=['#ff9e7a','#7ec8ff','#ffd23f','#9be07a','#c9a2ff','#ff8fb8','#5fd0c4'];
 const TE=['今天也要開心學習喔！','記得多喝水～','你的校園越來越漂亮了！','上課囉，同學們！'];
 const PR=['歡迎來到星星小學！','我們的學校越來越熱鬧了','謝謝你這麼用心蓋學校','校長最喜歡看大家玩了'];
+const PE=['大家來運動囉！','跑步前要先暖身喔','一、二、一、二！','記得補充水分！'];
 const NU=['不舒服要來保健室喔','記得洗手！','跌倒了要小心喔','多喝水，身體棒棒'];
 const CL=['垃圾要分類喔！','校園乾乾淨淨真舒服','寶特瓶放這邊','謝謝你幫忙撿垃圾'];
 const GD=['同學注意安全喔！','早安！歡迎來上學','我會好好守護星星小學','放學要排隊喔'];
@@ -553,10 +556,30 @@ const DRAW={
     s+=[[12,0],[3,90],[6,180],[9,270]].map(([t,a])=>{const rad=a*Math.PI/180;return `<text x="${(30+Math.sin(rad)*(r-6)).toFixed(1)}" y="${(cy-Math.cos(rad)*(r-6)+2.6).toFixed(1)}" font-size="7.5" font-weight="900" text-anchor="middle" fill="#2d2a26">${t}</text>`}).join('');
     return s+clockHands(30,cy,r);
   },
+  pool(lv,W,H){
+    let s=sh(W,H,.47);
+    const water=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="#4fb3e8"/><path d="M${x} ${y+h/3}h${w}M${x} ${y+2*h/3}h${w}" stroke="#fff" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/><path d="M${x+8} ${y+6}q6 -3 12 0t12 0M${x+w-40} ${y+h-8}q6 -3 12 0t12 0" stroke="#bfe8ff" stroke-width="1.6" fill="none"/>`;
+    if(lv<3){
+      s+=`<rect x="6" y="18" width="168" height="96" rx="8" fill="#e8dfcf"/><path d="M6 46h168M6 76h168M50 18v96M94 18v96M138 18v96" stroke="#d8ccb6" stroke-width="1"/>`+water(22,32,136,70)+`<path d="M150 30v14M156 30v14M150 34h6M150 40h6" stroke="#9aa4ad" stroke-width="1.6"/>`;
+      if(lv===1)s+=`<path d="M14 20v-24" stroke="#888" stroke-width="2"/><path d="M-2 -2a16 10 0 0 1 32 0z" fill="#ff7a59"/><rect x="160" y="96" width="14" height="8" rx="2" fill="#ffd23f"/>`;
+      else s+=`<path d="M10 18V-14M90 18V-14M170 18V-14" stroke="#8a9aa8" stroke-width="3"/><path d="M4 -16Q90 -34 176 -16L176 -8Q90 -26 4 -8Z" fill="#3d9bf0" opacity=".85"/><path d="M4 -8H176" stroke="#fff" stroke-width="2" stroke-dasharray="8 6"/><rect x="10" y="104" width="22" height="8" rx="3" fill="#ffd23f"/><rect x="40" y="104" width="22" height="8" rx="3" fill="#7cc65a"/><rect x="118" y="104" width="22" height="8" rx="3" fill="#ff7eb6"/>`+flag(168,-48,'#ffd23f');
+      return s;
+    }
+    s+=`<rect x="6" y="-6" width="168" height="120" rx="8" fill="#e6f3fb"/><path d="M2 -6Q90 -46 178 -6Z" fill="#9fd4f2" stroke="#fff" stroke-width="2"/><path d="M45 -20V-6M90 -26V-6M135 -20V-6" stroke="#fff" stroke-width="2"/>`+water(20,40,140,58)+`<path d="M6 30h168" stroke="#bcdcee" stroke-width="2"/><rect x="18" y="8" width="144" height="16" rx="5" fill="#fff"/><text x="90" y="20" font-size="11" font-weight="900" text-anchor="middle" fill="#2c7fb8">室內游泳池</text><rect x="78" y="100" width="24" height="14" rx="3" fill="#2c7fb8"/>`+flag(170,-50,'#7cc65a');
+    return s;
+  },
+  equip(lv,W,H){
+    let s=sh(W,H,.45);const wall=lv===3?'#ffe9c7':'#f4ead8';
+    s+=`<rect x="10" y="${lv===3?-14:2}" width="100" height="${lv===3?70:54}" rx="3" fill="${wall}"/><rect x="4" y="${lv===3?-24:-8}" width="112" height="12" rx="4" fill="#c9302c"/><rect x="40" y="${lv===3?20:22}" width="40" height="34" rx="2" fill="#9aa4ad"/><path d="M40 ${lv===3?26:28}h40M40 ${lv===3?32:34}h40M40 ${lv===3?38:40}h40M40 ${lv===3?44:46}h40" stroke="#7d8790" stroke-width="1.2"/><rect x="32" y="${lv===3?2:6}" width="56" height="14" rx="4" fill="#fff"/><text x="60" y="${lv===3?13:17}" font-size="9.5" font-weight="900" text-anchor="middle" fill="#c9302c">運動器材室</text>`;
+    s+=`<circle cx="22" cy="50" r="6" fill="#ff7a1a" stroke="#7a3b10" stroke-width=".8"/><circle cx="98" cy="50" r="6" fill="#fff" stroke="#333" stroke-width=".8"/><path d="M95 47l3 3 3-3M98 50v5" stroke="#333" stroke-width=".7" fill="none"/>`;
+    if(lv>=2)s+=`<path d="M112 56l4-14 4 14z" fill="#ff9a3c"/><path d="M2 56l4-14 4 14z" fill="#ff9a3c"/><rect x="12" y="30" width="20" height="12" rx="2" fill="#8a5a3b"/><circle cx="17" cy="29" r="4" fill="#3d9bf0"/><circle cx="26" cy="29" r="4" fill="#ffd23f"/>`;
+    if(lv===3)s+=`<path d="M10 -2h100" stroke="#e5484d" stroke-width="3"/><path d="M10 4h100" stroke="#3d9bf0" stroke-width="3"/>`+flag(104,-56,'#e5484d');
+    return s;
+  },
   sportscenter(lv,W,H){
     let s=sh(W,H,.46)+`<rect x="10" y="46" width="160" height="64" rx="4" fill="#ffe6c7"/><path d="M${lv===3?2:6} 48Q90 ${lv===3?-30:lv===2?-4:6} ${lv===3?178:174} 48Z" fill="${lv===3?'#ff6b2c':'#ff8a3d'}"/>`;
     if(lv>=2)s+=`<path d="M28 48Q90 ${lv===3?-4:14} 152 48" stroke="#fff" stroke-width="3" fill="none" opacity=".7"/><circle cx="90" cy="${lv===3?6:26}" r="8" fill="#ff7a1a" stroke="#7a3b10" stroke-width="1.2"/><path d="M82 ${lv===3?6:26}h16M90 ${lv===3?-2:18}v16" stroke="#7a3b10" stroke-width="1.2"/>`;
-    s+=`<rect x="22" y="74" width="40" height="16" rx="3" fill="#8fd3ff" stroke="#fff" stroke-width="2.5"/><rect x="118" y="74" width="40" height="16" rx="3" fill="#8fd3ff" stroke="#fff" stroke-width="2.5"/><rect x="76" y="80" width="28" height="30" rx="3" fill="#8fd3ff" stroke="#e0662a" stroke-width="2.5"/><path d="M90 80v30" stroke="#e0662a" stroke-width="2"/><rect x="58" y="54" width="64" height="16" rx="5" fill="#fff"/><text x="90" y="66" font-size="11" font-weight="900" text-anchor="middle" fill="#e0662a">運動中心</text>`;
+    s+=`<rect x="22" y="74" width="40" height="16" rx="3" fill="#8fd3ff" stroke="#fff" stroke-width="2.5"/><rect x="118" y="74" width="40" height="16" rx="3" fill="#8fd3ff" stroke="#fff" stroke-width="2.5"/><rect x="76" y="80" width="28" height="30" rx="3" fill="#8fd3ff" stroke="#e0662a" stroke-width="2.5"/><path d="M90 80v30" stroke="#e0662a" stroke-width="2"/><rect x="58" y="54" width="64" height="16" rx="5" fill="#fff"/><text x="90" y="66" font-size="11" font-weight="900" text-anchor="middle" fill="#e0662a">活動中心</text>`;
     if(lv>=2)s+=`<path d="M30 92v16l5-4 5 4v-16zM140 92v16l5-4 5 4v-16z" fill="#3d9bf0"/>`;
     if(lv===3)s+=flag(8,-6,'#ffd23f')+flag(170,-6,'#7cc65a');
     return s;
@@ -598,7 +621,7 @@ function mini(type,lv){const c=CAT[type],W=c.w*CELL,H=c.h*CELL;return `<svg view
 
 /* ---------- people ---------- */
 const SKIN='#ffd9b8';
-const ADULT=p=>['ft','mt','pr','gd','nurse','clean'].includes(p.role);
+const ADULT=p=>['ft','mt','pr','gd','nurse','clean','pe'].includes(p.role);
 function personSVG(p){
   const h='#3b2a20';
   const legs=col=>`<rect class="l1" x="-4.5" y="-9" width="3.5" height="8" rx="1.5" fill="${col}"/><rect class="l2" x="1" y="-9" width="3.5" height="8" rx="1.5" fill="${col}"/>`;
@@ -608,6 +631,7 @@ function personSVG(p){
   else if(p.role==='mt')b=legs('#2e3b63')+`<rect x="-6" y="-21" width="12" height="12" rx="3" fill="#7cc4ff"/><path d="M0 -21l-1.6 2.5 1.6 6 1.6-6z" fill="#e8634f"/>`+head(`<path d="M-6.6 -28a6.6 6.6 0 0 1 13.2 0q-6.6-3-13.2 0z" fill="${h}"/>`);
   else if(p.role==='pr')b=legs('#3d4250')+`<rect x="-6.5" y="-21" width="13" height="12.5" rx="3" fill="#5b6270"/><path d="M0 -21l-1.6 2.5 1.6 6 1.6-6z" fill="#d9503d"/>`+head(`<path d="M-6.6 -26q0-3 1.6-4v5zM6.6 -26q0-3-1.6-4v5z" fill="#bbb"/><g fill="none" stroke="#333" stroke-width=".8"><circle cx="-2.4" cy="-26.6" r="2"/><circle cx="2.4" cy="-26.6" r="2"/></g>`);
   else if(p.role==='gd')b=legs('#22304f')+`<rect x="-6" y="-21" width="12" height="12.5" rx="3" fill="#2f4a7a"/><rect x="-3.5" y="-19" width="2.5" height="2.5" fill="#ffd23f"/><path d="M-6 -15h12" stroke="#1e2f52" stroke-width="1.4"/>`+head(`<path d="M-7 -29.5h14v-2.5a7 4.5 0 0 0-14 0z" fill="#22304f"/><rect x="-8.5" y="-30" width="13" height="2" rx="1" fill="#1e2f52"/><circle cx="0" cy="-32" r="1.3" fill="#ffd23f"/>`);
+  else if(p.role==='pe')b=legs('#c9302c')+`<rect x="-6" y="-21" width="12" height="12.5" rx="3" fill="#e5484d"/><path d="M-6 -18h12M-6 -15.5h12" stroke="#fff" stroke-width="1"/><path d="M-3 -21l3 5 3-5" fill="none" stroke="#555" stroke-width=".8"/><circle cx="0" cy="-15.6" r="1.3" fill="#c0c0c0" stroke="#555" stroke-width=".5"/>`+head(`<path d="M-7 -29h14v-2.5a7 4.5 0 0 0-14 0z" fill="#e5484d"/><rect x="-1" y="-30.5" width="10" height="2" rx="1" fill="#c9302c"/>`);
   else if(p.role==='nurse')b=legs(SKIN)+`<path d="M-5.5 -21h11l2.5 13h-16z" fill="#ffffff" stroke="#d8e6ee" stroke-width=".8"/><path d="M-1.4 -18h2.8v1.6h1.6v2.8h-1.6v1.6h-2.8v-1.6h-1.6v-2.8h1.6z" fill="#e5484d"/>`+head(`<path d="M-7 -27a7 7 0 0 1 14 0v5h-2.5v-4h-9v4h-2.5z" fill="#5a3a28"/><path d="M-5 -33h10l-1.5 4h-7z" fill="#fff" stroke="#d8e6ee" stroke-width=".6"/><path d="M-.8 -32.4h1.6v1h1v1.6h-1v1h-1.6v-1h-1v-1.6h1z" fill="#e5484d"/>`);
   else if(p.role==='clean')b=legs('#3f6e3a')+`<rect x="-6" y="-21" width="12" height="13" rx="3" fill="#ff9a3c"/><path d="M-6 -16h12" stroke="#ffe08a" stroke-width="1.6"/><path d="M8 -26L11 -3" stroke="#a8643c" stroke-width="1.6"/><path d="M8 -3h7l-1 3h-6z" fill="#d9a520"/>`+head(`<path d="M-7 -29h14v-2a7 4.5 0 0 0-14 0z" fill="#3f6e3a"/><rect x="-1" y="-30.5" width="10" height="2" rx="1" fill="#3f6e3a"/>`);
   else if(p.role==='g')b=legs(SKIN)+`<rect x="-5.5" y="-21" width="11" height="9" rx="3" fill="${p.shirt}"/><path d="M-6 -13h12l2 5h-16z" fill="#ff8fb8"/>`+head(`<path d="M-6.8 -27a6.8 6.8 0 0 1 13.6 0q-6.8-2.2-13.6 0z" fill="${h}"/><circle cx="7" cy="-28" r="3" fill="${h}"/>`);
@@ -616,7 +640,7 @@ function personSVG(p){
   return `<svg class="fig" width="${ad?38:34}" height="${ad?58:50}" viewBox="-13 -37 26 38"><ellipse cx="0" cy="-1" rx="7" ry="2.2" fill="#000" opacity=".18"/>${b}</svg>`;
 }
 /* fixed order: 1 female teacher, 14 students, male teacher, 13 students, principal */
-const ROLES=(()=>{const r=[{role:'ft'}];let k=0;const stu=()=>{const p={role:k%2===0?'g':'b',shirt:SHIRTS[k%SHIRTS.length]};k++;return p};for(let i=0;i<14;i++)r.push(stu());r.push({role:'mt'});for(let i=0;i<13;i++)r.push(stu());r.push({role:'pr'});for(let i=0;i<30;i++)r.push(stu());return r})();
+const ROLES=(()=>{const r=[{role:'ft'}];let k=0;const stu=()=>{const p={role:k%2===0?'g':'b',shirt:SHIRTS[k%SHIRTS.length]};k++;return p};for(let i=0;i<14;i++)r.push(stu());r.push({role:'mt'});for(let i=0;i<44;i++)r.push(stu());return r})();
 const population=()=>S.campus.buildings.reduce((a,b)=>a+(CAT[b.type].ppl?CAT[b.type].ppl+2*(b.level-1):0),0);
 
 /* ---------- campus ---------- */
@@ -667,7 +691,7 @@ function makeNPC(p,x,y){
   const n={p,el,x,y,tx:x,ty:y,hw:ad?19:17,hh:ad?57:49,state:'act',until:performance.now()+Math.random()*1500,speed:p.role==='pr'?20:p.role==='gd'?22:(p.role==='g'||p.role==='b')?34:26};
   el._n=n;npcs.push(n);draw(n);return n;
 }
-const STAFF=[['guardhouse','gd','警衛叔叔來上班了！'],['health','nurse','護理師阿姨來保健室上班了！'],['recycle','clean','清潔工伯伯來幫忙打掃了！']];
+const STAFF=[['principal','pr','校長來到星星小學了！'],['equip','pe','體育老師來上班了！'],['guardhouse','gd','警衛叔叔來上班了！'],['health','nurse','護理師阿姨來保健室上班了！'],['recycle','clean','清潔工伯伯來幫忙打掃了！']];
 let staffN={};
 const hasB=t=>S.campus.buildings.some(b=>b.type===t);
 const crowdN=()=>npcs.filter(n=>!n.staff);
@@ -682,29 +706,29 @@ function syncPeople(announce){
   });
   if(announce&&n>before){
     const got=ROLES.slice(before,n);
-    if(got.some(p=>p.role==='pr'))setTimeout(()=>toast('校長來到星星小學了！'),900);
-    else if(got.some(p=>p.role==='mt'))setTimeout(()=>toast('男老師來了！'),900);
+    if(got.some(p=>p.role==='mt'))setTimeout(()=>toast('男老師來了！'),900);
     else setTimeout(()=>toast(`有 ${n-before} 位新同學來上學了！`),900);
   }
   renderCbar();
 }
 function renderCbar(){
-  const pop=population(),n=Math.min(S.maxPpl,pop),t=(n>0?1:0)+(n>15?1:0),pr=n>=30?1:0,st=Object.keys(staffN).length;
+  const pop=population(),n=Math.min(S.maxPpl,pop),t=(n>0?1:0)+(n>15?1:0),st=Object.keys(staffN).length;
   const per=periodNow(),f=x=>x[0]+':'+pad(x[1]),raw=curPhase();
   const status=phaseNow==='class'?`<span class="bell">上課中${per&&!forcePhase?` ${tshow(per[0])}–${tshow(per[1])}`:''}</span>`:phaseNow==='lunch'?`<span class="bell">午休時間 ${tshow(S.schedule.lunch[0])}–${tshow(S.schedule.lunch[1])}</span>`:raw!=='free'?`<span class="bell off">${raw==='class'?'上課':'午休'}時間（還沒有教室）</span>`:'<span class="bell off">下課時間</span>';
-  $('#pop').innerHTML=`${status}<b>全校 ${pop+st} 人</b>　老師 ${t}・學生 ${n-t-pr}${pr?'・校長 1':''}${staffN.gd?'・警衛 1':''}${staffN.nurse?'・護理師 1':''}${staffN.clean?'・清潔工 1':''}${pop>S.maxPpl?`（學生老師畫面顯示 ${S.maxPpl} 人）`:''}`;
+  $('#pop').innerHTML=`${status}<b>全校 ${pop+st} 人</b>　老師 ${t}・學生 ${n-t}${staffN.pr?'・校長 1':''}${staffN.pe?'・體育老師 1':''}${staffN.gd?'・警衛 1':''}${staffN.nurse?'・護理師 1':''}${staffN.clean?'・清潔工 1':''}${pop>S.maxPpl?`（學生老師畫面顯示 ${S.maxPpl} 人）`:''}`;
   if($('#clsbtn'))$('#clsbtn').textContent=({class:'測試：上課',lunch:'測試：午休',free:'測試：下課'})[forcePhase]||'時間：依時鐘';
 }
 function startHint(){let h=$('#hint0');const need=!S.campus.buildings.some(b=>CAT[b.type].ppl);if(need&&!h){h=document.createElement('div');h.id='hint0';h.className='hint0';h.textContent='按「＋ 建造」，在「教學」裡蓋第一間教室，老師和同學就會來上學喔！';mapEl.appendChild(h)}else if(!need&&h)h.remove()}
 function renderCampus(){mapEl.querySelectorAll('.bld').forEach(x=>x.remove());S.campus.buildings.forEach(b=>mapEl.appendChild(bldEl(b)));syncPeople(false);startHint()}
 
-const INSIDE=['classroom','library','office','principal','sportscenter','health','auditorium'];
-const EXIT_ICON={library:'📖',sportscenter:'💪',health:'🩹',auditorium:'🎵'};
-const ROLE_OK={office:['ft','mt'],principal:['pr'],guardhouse:['gd'],recycle:['clean']};
+const INSIDE=['classroom','library','office','principal','sportscenter','health','auditorium','equip'];
+const EXIT_ICON={library:'📖',sportscenter:'💪',health:'🩹',auditorium:'🎵',equip:'⚽'};
+const ROLE_OK={office:['ft','mt'],principal:['pr'],guardhouse:['gd'],recycle:['clean'],equip:['pe']};
 function pickTarget(n){
   const r=n.p.role;
   let bs=S.campus.buildings.filter(b=>b.type!=='gate'&&(!ROLE_OK[b.type]||ROLE_OK[b.type].includes(r)));
   if(r==='gd'){const g=S.campus.buildings.filter(b=>b.type==='guardhouse'||b.type==='gate');if(Math.random()<.75)bs=g}
+  if(r==='pe'&&Math.random()<.8){const sp=S.campus.buildings.filter(b=>['court','track','pool','sportscenter','equip'].includes(b.type));if(sp.length)bs=sp}
   if(r==='nurse'&&Math.random()<.7)bs=S.campus.buildings.filter(b=>b.type==='health');
   if(r==='clean'&&hasB('recycle')&&Math.random()<.35)bs=S.campus.buildings.filter(b=>b.type==='recycle');
   if(r==='pr'&&hasB('principal')&&Math.random()<.4)bs=S.campus.buildings.filter(b=>b.type==='principal');
@@ -715,7 +739,7 @@ function pickTarget(n){
     else if(b.type==='gate'){n.tx=x0+(Math.random()<.5?14:W-14);n.ty=y0+H-2}
     else if(b.type==='guardhouse'){n.tx=x0+W/2+16;n.ty=y0+H+4}
     else if(b.type==='recycle'){n.tx=x0+W/2+(Math.random()*40-20);n.ty=y0+H+6}
-    else if(['court','sandbox','playground','track'].includes(b.type)){n.tx=x0+22+Math.random()*(W-44);n.ty=y0+34+Math.random()*(H-44)}
+    else if(['court','sandbox','playground','track','pool'].includes(b.type)){n.tx=x0+22+Math.random()*(W-44);n.ty=y0+34+Math.random()*(H-44)}
     else{n.tx=x0+W/2+(Math.random()<.5?-24:24);n.ty=y0+H-2}
     n.target=b;
   }else{n.target=null;n.tx=30+Math.random()*(COLS*CELL-60);n.ty=50+Math.random()*(ROWS*CELL-80)}
@@ -755,7 +779,8 @@ function arrive(n,t){
     case 'recycle':setAct(n,'♻️','dig',3200,t);break;
     case 'gate':setAct(n,'👋',null,3000,t);break;
     case 'classroom':case 'library':case 'office':case 'principal':case 'sportscenter':case 'health':case 'auditorium':n.state='inside';n.el.style.opacity=0;n.until=t+2500+Math.random()*3500;break;
-    case 'court':setAct(n,'🏀','bounce',3200,t);break;
+    case 'court':setAct(n,n.p.role==='pe'?'📣':'🏀','bounce',3200,t);break;
+    case 'pool':setAct(n,n.p.role==='pe'?'📣':'🏊','dig',3600,t);break;
     case 'sandbox':setAct(n,'🏰','dig',3600,t);break;
     case 'playground':setAct(n,'🎈','jump',3000,t);break;
     case 'track':{const c=CAT.track,W=c.w*CELL,H=c.h*CELL;n.cx=b.c*CELL+W/2;n.cy=b.r*CELL+H/2+6;n.rx=W/2-20;n.ry=H/2-22;n.ang=Math.atan2((n.y-n.cy)/n.ry,(n.x-n.cx)/n.rx);n.state='run';n.until=t+4500+Math.random()*2500;n.el.querySelector('.ic').textContent='💨';break}
@@ -776,7 +801,7 @@ let last=performance.now();
 function tick(t){const dt=Math.min(.05,(t-last)/1000);last=t;if(t-lastCheck>1000){lastCheck=t;phaseCheck(t)}if(view==='campus')for(const n of npcs)step(n,dt,t);requestAnimationFrame(tick)}
 requestAnimationFrame(tick);
 function speak(n){
-  const lines=n.p.role==='nurse'?NU:n.p.role==='clean'?CL:n.p.role==='gd'?GD:n.p.role==='pr'?PR:(n.p.role==='ft'||n.p.role==='mt')?TE:ST.concat(actH().map(h=>`我今天也有${h.title}喔！`));
+  const lines=n.p.role==='pe'?PE:n.p.role==='nurse'?NU:n.p.role==='clean'?CL:n.p.role==='gd'?GD:n.p.role==='pr'?PR:(n.p.role==='ft'||n.p.role==='mt')?TE:ST.concat(actH().map(h=>`我今天也有${h.title}喔！`));
   let b=n.el.querySelector('.say');if(!b){b=document.createElement('div');b.className='say';n.el.appendChild(b)}
   b.textContent=lines[Math.floor(Math.random()*lines.length)];n.say=true;clearTimeout(n.sayT);
   if(n.state==='walk'||n.state==='act'){clearAct(n);n.state='act';n.until=performance.now()+2600}
@@ -835,7 +860,7 @@ function closeSheet(){$('#sheet').classList.remove('on');$('#back').classList.re
 $('#back').onclick=closeSheet;
 function openBuild(tab){
   buildTab=tab||buildTab;const a=avail();
-  const items=Object.keys(CAT).filter(k=>CAT[k].cat===buildTab).map(k=>{const c=CAT[k],lack=c.cost[0]-a;return `<button class="item ${lack>0?'lack':''}" data-build="${k}"><span class="pv">${mini(k,1)}</span><b>${c.name}</b><span class="cost">★ ${c.cost[0]}</span><small>${lack>0?`還差 ${lack} 顆`:k==='guardhouse'?'警衛會出現':k==='recycle'?'清潔工會出現':k==='health'?'護理師會出現':k==='clocktower'?'報時、上下課鐘聲':c.ppl?`帶來 ${c.ppl} 人`:`${c.w}×${c.h} 格`}</small></button>`}).join('');
+  const items=Object.keys(CAT).filter(k=>CAT[k].cat===buildTab).sort((x,y)=>CAT[x].cost[0]-CAT[y].cost[0]).map(k=>{const c=CAT[k],lack=c.cost[0]-a;return `<button class="item ${lack>0?'lack':''}" data-build="${k}"><span class="pv">${mini(k,1)}</span><b>${c.name}</b><span class="cost">★ ${c.cost[0]}</span><small>${lack>0?`還差 ${lack} 顆`:k==='guardhouse'?'警衛會出現':k==='equip'?'體育老師會出現':k==='principal'?'校長會出現':k==='recycle'?'清潔工會出現':k==='health'?'護理師會出現':k==='clocktower'?'報時、上下課鐘聲':c.ppl?`帶來 ${c.ppl} 人`:`${c.w}×${c.h} 格`}</small></button>`}).join('');
   openSheet(`<div class="sh-h"><h2>要蓋什麼？</h2><span class="pill sm"><span class="st">★</span>${a}</span></div><div class="segs">${CATS.map(c=>`<button class="seg ${c===buildTab?'on':''}" data-tab="${c}">${c}</button>`).join('')}</div><div class="items">${items}</div>`);
 }
 function openBld(id){
@@ -845,7 +870,7 @@ function openBld(id){
   let up;
   if(b.level>=3)up=`<p class="note">已經是最高級了，好厲害！</p>`;
   else{const cost=c.cost[b.level],lack=cost-a;up=`<div class="upg"><span class="pv big">${mini(b.type,b.level+1)}</span><div><b>升到 ${b.level+1} 級</b><br><small>${UPNOTE[b.level+1]}${c.ppl?'，再多 2 人':''}</small><br><button class="btn" data-up="${b.id}" ${lack>0?'disabled':''}>${lack>0?`還差 ${lack} 顆星`:`升級（★ ${cost}）`}</button></div></div>`}
-  openSheet(`<div class="sh-h"><h2>${c.name}</h2><span class="lvs">${[1,2,3].map(i=>`<span class="lv ${i<=b.level?'on':''}">★</span>`).join('')}</span></div><span class="pv big">${mini(b.type,b.level)}</span><p class="note">${c.ppl?`現在帶來 ${c.ppl+2*(b.level-1)} 位老師和同學${b.type==='health'?'，護理師阿姨也在這裡':''}`:b.type==='gate'?'星星小學的大門，新來的老師和同學都從這裡進學校。校門可以升級，也可以移動位置。':b.type==='guardhouse'?'警衛叔叔在這裡守護校園':b.type==='recycle'?'清潔工伯伯在這裡整理資源回收':b.type==='clocktower'?`${timeWords()}。鐘塔的指針就是現在的時間。<br><button class="btn" data-time="1" style="margin-top:8px">再報一次時間</button> <button class="btn ghostbtn" data-bell="1" style="margin-top:8px">聽上下課鐘聲</button>`:'讓校園更漂亮'}</p>${up}<div class="row">${b.type==='gate'?'':`<button class="btn ghostbtn danger" data-demo="${b.id}">拆除</button>`}<button class="btn ghostbtn" data-move="${b.id}">移動位置</button><button class="btn ghostbtn" data-close="1">關閉</button></div>`);
+  openSheet(`<div class="sh-h"><h2>${c.name}</h2><span class="lvs">${[1,2,3].map(i=>`<span class="lv ${i<=b.level?'on':''}">★</span>`).join('')}</span></div><span class="pv big">${mini(b.type,b.level)}</span><p class="note">${c.ppl?`現在帶來 ${c.ppl+2*(b.level-1)} 位老師和同學${b.type==='health'?'，護理師阿姨也在這裡':''}`:b.type==='gate'?'星星小學的大門，新來的老師和同學都從這裡進學校。校門可以升級，也可以移動位置。':b.type==='guardhouse'?'警衛叔叔在這裡守護校園':b.type==='equip'?'體育老師在這裡準備上課的器材':b.type==='principal'?'校長在這裡辦公':b.type==='recycle'?'清潔工伯伯在這裡整理資源回收':b.type==='clocktower'?`${timeWords()}。鐘塔的指針就是現在的時間。<br><button class="btn" data-time="1" style="margin-top:8px">再報一次時間</button> <button class="btn ghostbtn" data-bell="1" style="margin-top:8px">聽上下課鐘聲</button>`:'讓校園更漂亮'}</p>${up}<div class="row">${b.type==='gate'?'':`<button class="btn ghostbtn danger" data-demo="${b.id}">拆除</button>`}<button class="btn ghostbtn" data-move="${b.id}">移動位置</button><button class="btn ghostbtn" data-close="1">關閉</button></div>`);
 }
 function askDemolish(id){const b=S.campus.buildings.find(x=>x.id===id);if(!b)return;const c=CAT[b.type];openSheet(`<div class="sh-h"><h2>要拆除${c.name}嗎？</h2></div><span class="pv big">${mini(b.type,b.level)}</span><p class="note">拆除後這個設施會消失，用掉的星星不會退回${c.ppl?`，也會少 ${c.ppl+2*(b.level-1)} 位老師和同學`:''}。</p><div class="row"><button class="btn ghostbtn" data-demono="${b.id}">否</button><button class="btn danger" data-demoyes="${b.id}">是，拆除</button></div>`)}
 function demolish(id){
@@ -1207,7 +1232,7 @@ function pSet(){
   else if(pSub==='bonus'){const hist=Object.entries(S.bonusGiven).sort().reverse().slice(0,8);h+=back+`<div class="pcard"><h3>全週達成率 100% 獎勵</h3><p class="note" style="font-size:13px">一週（週一到週日）排定的習慣全部完成，就自動多給孩子這些星星。每週只會給一次，設成 0 就是關閉。</p><label class="field"><span>額外獎勵星星數</span><input type="number" id="bN" min="0" max="200" value="${S.bonusStars}"></label><button class="sbtn pri" data-pa="bsave">儲存</button></div><div class="pcard"><h3>已發的獎勵</h3>${hist.map(([k,v])=>{const d=new Date(k+'T12:00:00');return `<div class="prow"><div class="grow">${d.getMonth()+1}/${d.getDate()} 那週</div><b class="ok">+${v} ★</b></div>`}).join('')||'<p class="note">還沒有拿過全週獎勵。</p>'}</div>`}
   else if(pSub==='schedule'){const P=S.schedule.periods;h+=back+`<div class="pcard"><h3>上課時間</h3>`+P.map((p,i)=>`<div class="prow sched"><b>第 ${i+1} 節</b><input type="time" value="${p[0]}" data-per="${i}" data-e="0"><span>–</span><input type="time" value="${p[1]}" data-per="${i}" data-e="1"><button class="sbtn red" data-pa="pdel" data-i="${i}" aria-label="刪除第 ${i+1} 節">✕</button></div>`).join('')+`<button class="sbtn" data-pa="padd" style="margin-top:10px">＋ 加一節</button></div><div class="pcard"><h3>午休時間</h3><div class="prow sched"><b>午休</b><input type="time" value="${S.schedule.lunch[0]}" data-lun="0"><span>–</span><input type="time" value="${S.schedule.lunch[1]}" data-lun="1"></div><p class="note" style="font-size:13px">其餘時間都是下課。蓋了鐘塔才會響鐘聲。</p><button class="sbtn" data-pa="pdef">恢復預設時間</button></div>`}
   else if(pSub==='child'){h+=back+`<div class="pcard"><h3>孩子資料</h3><label class="field"><span>名字（孩子畫面的問候會用到）</span><input class="tx" id="cName" value="${esc(S.child.name)}" maxlength="10"></label><button class="sbtn pri" data-pa="cname">儲存名字</button></div>${CLOUD&&CLOUD.ready?'':`<div class="pcard"><h3>家長密碼</h3><label class="field"><span>新密碼（4 位數字）</span><input class="pin-in" id="pin1" inputmode="numeric" maxlength="4"></label><label class="field"><span>再輸入一次</span><input class="pin-in" id="pin2" inputmode="numeric" maxlength="4"></label><button class="sbtn pri" data-pa="cpin">更改密碼</button></div>`}`}
-  else if(pSub==='campus'){h+=back+`<div class="pcard"><h3>畫面最多顯示人數</h3><label class="field"><span>學生和老師最多顯示幾人</span><select id="maxP">${[10,15,20,25,30,35,40,45,50,60].map(v=>`<option ${v===S.maxPpl?'selected':''}>${v}</option>`).join('')}</select></label><p class="note" style="font-size:13px">出現順序：女老師 → 14 位學生 → 男老師 → 13 位學生 → 校長（第 30 位），之後都是學生。警衛、護理師、清潔工另外算。人數多時舊手機可能會變慢。</p><button class="sbtn pri" data-pa="maxp">儲存</button></div>`}
+  else if(pSub==='campus'){h+=back+`<div class="pcard"><h3>畫面最多顯示人數</h3><label class="field"><span>學生和老師最多顯示幾人</span><select id="maxP">${[10,15,20,25,30,35,40,45,50,60].map(v=>`<option ${v===S.maxPpl?'selected':''}>${v}</option>`).join('')}</select></label><p class="note" style="font-size:13px">出現順序：女老師 → 14 位學生 → 男老師（第 16 位），之後都是學生。校長、體育老師、警衛、護理師、清潔工由各自的設施帶來，另外算，不包含在這個人數內。人數多時舊手機可能會變慢。</p><button class="sbtn pri" data-pa="maxp">儲存</button></div>`}
   else if(pSub==='test'){h+=back+`<div class="pcard"><h3>測試工具</h3><p class="note" style="font-size:13px">讓你不用等時間就能看到效果，不會記入每週復盤。</p><div class="row" style="justify-content:flex-start"><button class="sbtn" data-pa="t10">+10 星星</button></div><h3 style="margin-top:12px">上課狀態</h3><div class="chips">${[[null,'依時鐘'],['class','上課'],['lunch','午休'],['free','下課']].map(([v,l])=>`<button class="chip ${forcePhase===v?'on':''}" data-pa="phase" data-v="${v||''}">${l}</button>`).join('')}</div></div>`}
   else if(pSub==='reset'){h+=back+`<div class="pcard"><h3>清除資料</h3><p class="note">會清掉所有打卡紀錄、星星和校園，回到只有校門的新校園。習慣和獎勵清單、密碼也會回到預設。</p><button class="sbtn red" data-pa="reset1">清除資料…</button></div>`}
   $('#p-set').innerHTML=h+'</div>';
