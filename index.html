@@ -1223,7 +1223,11 @@ function pReview(){
   $('#p-review').querySelectorAll('[data-rv]').forEach(t=>t.oninput=()=>{const o=S.reviews[wk]||(S.reviews[wk]={});o[t.dataset.rv]=t.value;save()});
 }
 /* settings */
-const MENU=[['habits','📋','習慣管理','新增、修改、停用、排順序'],['rewards','🎁','獎勵管理','獎勵清單和需要的星星'],['stars','⭐','星星調整','手動加減星星'],['bonus','🏆','達成獎勵','全週達成率 100% 的額外星星'],['schedule','🔔','作息時間','上課、午休時間'],['child','👧','孩子資料與密碼','名字、家長密碼'],['campus','🏫','校園設定','畫面最多顯示人數'],['test','🧪','測試工具','加星星、切換上課狀態'],['reset','🗑️','清除資料','從新校園重新開始']];
+const APP_VERSION='1.00';
+const CHANGELOG=[
+  {v:'1.00',date:'2026-11-27',kind:'正式版',items:['孩子畫面：今天打卡（記錄打卡時間）、我的校園（模擬校園、可縮放）、獎勵商店、這週達成率','家長畫面：總覽、紀錄月曆、每週復盤與自訂日期區間、Excel 報表匯出','設定：習慣與自訂時段、獎勵、星星調整、達成獎勵、作息時間、校園人數、家庭成員與邀請碼','雲端同步（Firebase）與訪客單機模式','新增「版本」頁，開始記錄版本']}
+];
+const MENU=[['habits','📋','習慣管理','新增、修改、停用、排順序'],['rewards','🎁','獎勵管理','獎勵清單和需要的星星'],['stars','⭐','星星調整','手動加減星星'],['bonus','🏆','達成獎勵','全週達成率 100% 的額外星星'],['schedule','🔔','作息時間','上課、午休時間'],['child','👧','孩子資料與密碼','名字、家長密碼'],['campus','🏫','校園設定','畫面最多顯示人數'],['test','🧪','測試工具','加星星、切換上課狀態'],['reset','🗑️','清除資料','從新校園重新開始'],['version','🏷️','版本',`目前 ${APP_VERSION} 版・修改紀錄`]];
 function pSet(){
   const back=`<button class="sbtn" data-pa="sub" data-s="" style="margin-bottom:12px">‹ 設定</button>`;
   let h='<div class="inner">';
@@ -1239,6 +1243,7 @@ function pSet(){
   else if(pSub==='child'){h+=back+`<div class="pcard"><h3>孩子資料</h3><label class="field"><span>名字（孩子畫面的問候會用到）</span><input class="tx" id="cName" value="${esc(S.child.name)}" maxlength="10"></label><button class="sbtn pri" data-pa="cname">儲存名字</button></div>${CLOUD&&CLOUD.ready?'':`<div class="pcard"><h3>家長密碼</h3><label class="field"><span>新密碼（4 位數字）</span><input class="pin-in" id="pin1" inputmode="numeric" maxlength="4"></label><label class="field"><span>再輸入一次</span><input class="pin-in" id="pin2" inputmode="numeric" maxlength="4"></label><button class="sbtn pri" data-pa="cpin">更改密碼</button></div>`}`}
   else if(pSub==='campus'){h+=back+`<div class="pcard"><h3>畫面最多顯示人數</h3><label class="field"><span>學生和老師最多顯示幾人</span><select id="maxP">${[10,15,20,25,30,35,40,45,50,60].map(v=>`<option ${v===S.maxPpl?'selected':''}>${v}</option>`).join('')}</select></label><p class="note" style="font-size:13px">出現順序：女老師 → 14 位學生 → 男老師（第 16 位），之後都是學生。校長、體育老師、警衛、護理師、清潔工由各自的設施帶來，另外算，不包含在這個人數內。人數多時舊手機可能會變慢。</p><button class="sbtn pri" data-pa="maxp">儲存</button></div>`}
   else if(pSub==='test'){h+=back+`<div class="pcard"><h3>測試工具</h3><p class="note" style="font-size:13px">讓你不用等時間就能看到效果，不會記入每週復盤。</p><div class="row" style="justify-content:flex-start"><button class="sbtn" data-pa="t10">+10 星星</button></div><h3 style="margin-top:12px">上課狀態</h3><div class="chips">${[[null,'依時鐘'],['class','上課'],['lunch','午休'],['free','下課']].map(([v,l])=>`<button class="chip ${forcePhase===v?'on':''}" data-pa="phase" data-v="${v||''}">${l}</button>`).join('')}</div></div>`}
+  else if(pSub==='version'){h+=back+`<div class="pcard" style="text-align:center"><small class="note">目前版本</small><div class="bigcode" style="letter-spacing:.05em">${APP_VERSION}</div><p class="note" style="font-size:13px">小改版：1.01、1.02…；大改版：2.00、3.00…</p></div><div class="pcard"><h3>修改紀錄</h3>`+CHANGELOG.map(c=>`<div class="prow" style="align-items:flex-start"><b style="width:56px;flex:none">${c.v}</b><div class="grow"><b>${c.kind}</b><small>${c.date}</small><ul style="margin:6px 0 0;padding-left:18px;font-size:14px">${c.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div></div>`).join('')+`</div>`}
   else if(pSub==='reset'){h+=back+`<div class="pcard"><h3>清除資料</h3><p class="note">會清掉所有打卡紀錄、星星和校園，回到只有校門的新校園。習慣和獎勵清單、密碼也會回到預設。</p><button class="sbtn red" data-pa="reset1">清除資料…</button></div>`}
   $('#p-set').innerHTML=h+'</div>';
 }
